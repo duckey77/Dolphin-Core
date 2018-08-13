@@ -31,6 +31,7 @@
 #import "Wii/OEWiiSystemResponderClient.h"
 
 @class OERingBuffer;
+@class DolOEAudioBridge;
 
 OE_EXPORTED_CLASS
 @interface DolphinGameCore : OEGameCore
@@ -38,6 +39,8 @@ OE_EXPORTED_CLASS
 - (void) swapBuffers;
 - (const char *) getBundlePath;
 - (void) SetScreenSize:(int)width :(int)height;
+
+- (DolOEAudioBridge *)getAudioBridge;
 
 @end
 

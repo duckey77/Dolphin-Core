@@ -38,14 +38,11 @@
 
 #import "DolphinGameCore.h"
 #include "DolHost.h"
-#import <OpenEmuBase/OERingBuffer.h>
-
+#import "DolOEAudioBridge.h"
 #import <AppKit/AppKit.h>
 #include <OpenGL/gl3.h>
 #include <OpenGL/gl3ext.h>
 
-#define SAMPLERATE 48000
-#define SIZESOUNDBUFFER 48000 / 60 * 4
 #define OpenEmu 1
 
 @interface DolphinGameCore () <OEGCSystemResponderClient>
@@ -67,13 +64,16 @@ DolphinGameCore *_current = 0;
     NSString *_dolphinCoreModule;
     OEIntSize _dolphinCoreAspect;
     OEIntSize _dolphinCoreScreen;
-    
+  
+    DolOEAudioBridge *_audioBridge;
 }
 
 - (instancetype)init
 {
-    if(self = [super init])
+    if(self = [super init]) {
         dol_host = DolHost::GetInstance();
+        _audioBridge = [[DolOEAudioBridge alloc] init];
+    }
 
     _current = self;
 
@@ -230,7 +230,9 @@ DolphinGameCore *_current = 0;
     return GL_RGBA;
 }
 
+
 # pragma mark - Audio
+
 - (NSUInteger)channelCount
 {
     return 2;
@@ -239,6 +241,16 @@ DolphinGameCore *_current = 0;
 - (double)audioSampleRate
 {
     return SAMPLERATE;
+}
+
+- (DolOEAudioBridge *)getAudioBridge
+{
+    return _audioBridge;
+}
+
+- (id<OEAudioBuffer>)audioBufferAtIndex:(NSUInteger)index
+{
+    return _audioBridge;
 }
 
 # pragma mark - Save States
