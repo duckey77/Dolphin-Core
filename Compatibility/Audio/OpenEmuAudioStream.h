@@ -31,14 +31,23 @@
 
 #include "AudioCommon/SoundStream.h"
 
+/* the sample rate is hardcoded in the initializer of the SoundStream
+ * base class */
+#define OE_SAMPLERATE 48000
+
+/* max amount of bytes pullable at once
+ * should be <= Mixer::MAX_SAMPLES * sizeof(short) * 2 (= 16384)
+ * however we can't use Mixer::MAX_SAMPLES because it is private */
+#define OE_SIZESOUNDBUFFER (16384 / 2)
+
 class OpenEmuAudioStream final : public SoundStream
 {
 public:
-    bool Init() override;
+    bool Init() override { return true; }
     bool SetRunning(bool running) override;
     static bool isValid() { return true; }
     int readAudio(void *buffer, int len);
-    ~OpenEmuAudioStream();
+    ~OpenEmuAudioStream() {};
 private:
     bool running;
 };

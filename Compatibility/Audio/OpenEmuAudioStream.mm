@@ -29,14 +29,6 @@
 #include <Foundation/Foundation.h>
 #include "DolphinGameCore.h"
 #include "OpenEmuAudioStream.h"
-#include "DolOEAudioBridge.h"
-
-
-bool OpenEmuAudioStream::Init()
-{
-    [[_current getAudioBridge] setDolAudioStream:this];
-    return true;
-}
 
 
 bool OpenEmuAudioStream::SetRunning(bool r)
@@ -54,11 +46,4 @@ int OpenEmuAudioStream::readAudio(void *buffer, int len)
     int bytePerSample = 2 * sizeof(short);
     return mix->Mix((short *)buffer, len / bytePerSample) * bytePerSample;
 }
-
-
-OpenEmuAudioStream::~OpenEmuAudioStream()
-{
-    [[_current getAudioBridge] setDolAudioStream:nullptr];
-}
-
 

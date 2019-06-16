@@ -27,20 +27,16 @@
 #import <Cocoa/Cocoa.h>
 #import <OpenEmuBase/OEGameCore.h>
 #import <OpenEmuBase/OETimingUtils.h>
+#import <OpenEmuBase/OEAudioBuffer.h>
 #import "OEGCSystemResponderClient.h"
 #import "Wii/OEWiiSystemResponderClient.h"
 
-@class OERingBuffer;
-@class DolOEAudioBridge;
-
 OE_EXPORTED_CLASS
-@interface DolphinGameCore : OEGameCore
+@interface DolphinGameCore : OEGameCore <OEAudioBuffer>
 
 - (void) swapBuffers;
 - (const char *) getBundlePath;
 - (void) SetScreenSize:(int)width :(int)height;
-
-- (DolOEAudioBridge *)getAudioBridge;
 
 @end
 

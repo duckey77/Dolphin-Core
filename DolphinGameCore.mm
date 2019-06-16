@@ -38,7 +38,9 @@
 
 #import "DolphinGameCore.h"
 #include "DolHost.h"
-#import "DolOEAudioBridge.h"
+#include "AudioCommon/SoundStream.h"
+#include "OpenEmuAudioStream.h"
+#include <stdatomic.h>
 #import <AppKit/AppKit.h>
 #include <OpenGL/gl3.h>
 #include <OpenGL/gl3ext.h>
@@ -51,28 +53,27 @@
 
 DolphinGameCore *_current = 0;
 
+extern std::unique_ptr<SoundStream> g_sound_stream;
+
 @implementation DolphinGameCore
 {
     DolHost *dol_host;
 
     uint16_t *_soundBuffer;
     bool _isWii;
-    bool _isInitialized;
+    atomic_bool _isInitialized;
     float _frameInterval;
 
     NSString *autoLoadStatefileName;
     NSString *_dolphinCoreModule;
     OEIntSize _dolphinCoreAspect;
     OEIntSize _dolphinCoreScreen;
-  
-    DolOEAudioBridge *_audioBridge;
 }
 
 - (instancetype)init
 {
     if(self = [super init]) {
         dol_host = DolHost::GetInstance();
-        _audioBridge = [[DolOEAudioBridge alloc] init];
     }
 
     _current = self;
@@ -240,17 +241,29 @@ DolphinGameCore *_current = 0;
 
 - (double)audioSampleRate
 {
-    return SAMPLERATE;
-}
-
-- (DolOEAudioBridge *)getAudioBridge
-{
-    return _audioBridge;
+    return OE_SAMPLERATE;
 }
 
 - (id<OEAudioBuffer>)audioBufferAtIndex:(NSUInteger)index
 {
-    return _audioBridge;
+    return self;
+}
+
+- (NSUInteger)length
+{
+    return OE_SIZESOUNDBUFFER;
+}
+
+- (NSUInteger)read:(void *)buffer maxLength:(NSUInteger)len
+{
+    if (_isInitialized && g_sound_stream)
+        return static_cast<OpenEmuAudioStream*>(g_sound_stream.get())->readAudio(buffer, (int)len);
+    return 0;
+}
+
+- (NSUInteger)write:(const void *)buffer maxLength:(NSUInteger)length
+{
+    return 0;
 }
 
 # pragma mark - Save States

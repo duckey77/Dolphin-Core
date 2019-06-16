@@ -95,7 +95,6 @@
 
 /* Begin PBXBuildFile section */
 		019177F1211F6F73009ACEC2 /* CubebUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 019177EF211F6F72009ACEC2 /* CubebUtils.cpp */; };
-		019177F4211F7724009ACEC2 /* DolOEAudioBridge.mm in Sources */ = {isa = PBXBuildFile; fileRef = 019177F3211F7724009ACEC2 /* DolOEAudioBridge.mm */; };
 		0198781B211DCD5A00E6CF87 /* OpenEmuAudioStream.mm in Sources */ = {isa = PBXBuildFile; fileRef = 01987818211DCD4E00E6CF87 /* OpenEmuAudioStream.mm */; };
 		0198781D211DD0E600E6CF87 /* AudioCommon.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0198781C211DD0E500E6CF87 /* AudioCommon.cpp */; };
 		01987820211DD33C00E6CF87 /* NullSoundStream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0198781E211DD33B00E6CF87 /* NullSoundStream.cpp */; };
@@ -1501,8 +1500,6 @@
 /* Begin PBXFileReference section */
 		019177EF211F6F72009ACEC2 /* CubebUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CubebUtils.cpp; path = dolphin/Source/Core/AudioCommon/CubebUtils.cpp; sourceTree = "<group>"; };
 		019177F0211F6F73009ACEC2 /* CubebUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CubebUtils.h; path = dolphin/Source/Core/AudioCommon/CubebUtils.h; sourceTree = "<group>"; };
-		019177F2211F7724009ACEC2 /* DolOEAudioBridge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = DolOEAudioBridge.h; path = Audio/DolOEAudioBridge.h; sourceTree = "<group>"; };
-		019177F3211F7724009ACEC2 /* DolOEAudioBridge.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = DolOEAudioBridge.mm; path = Audio/DolOEAudioBridge.mm; sourceTree = "<group>"; };
 		01987818211DCD4E00E6CF87 /* OpenEmuAudioStream.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = OpenEmuAudioStream.mm; path = Audio/OpenEmuAudioStream.mm; sourceTree = "<group>"; };
 		01987819211DCD4E00E6CF87 /* OpenEmuAudioStream.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = OpenEmuAudioStream.h; path = Audio/OpenEmuAudioStream.h; sourceTree = "<group>"; };
 		0198781C211DD0E500E6CF87 /* AudioCommon.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = AudioCommon.cpp; path = Audio/AudioCommon.cpp; sourceTree = "<group>"; };
@@ -3960,8 +3957,6 @@
 				0198781C211DD0E500E6CF87 /* AudioCommon.cpp */,
 				01987819211DCD4E00E6CF87 /* OpenEmuAudioStream.h */,
 				01987818211DCD4E00E6CF87 /* OpenEmuAudioStream.mm */,
-				019177F2211F7724009ACEC2 /* DolOEAudioBridge.h */,
-				019177F3211F7724009ACEC2 /* DolOEAudioBridge.mm */,
 			);
 			name = Audio;
 			sourceTree = "<group>";
@@ -6735,6 +6730,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 			);
 			mainGroup = 5FED8316BA544A72BC120E96;
@@ -7834,7 +7830,6 @@
 				01987820211DD33C00E6CF87 /* NullSoundStream.cpp in Sources */,
 				019177F1211F6F73009ACEC2 /* CubebUtils.cpp in Sources */,
 				3E3D70A01C82B03600091C4D /* WaveFile.cpp in Sources */,
-				019177F4211F7724009ACEC2 /* DolOEAudioBridge.mm in Sources */,
 				0198781D211DD0E600E6CF87 /* AudioCommon.cpp in Sources */,
 				0198781B211DCD5A00E6CF87 /* OpenEmuAudioStream.mm in Sources */,
 				3E3D709A1C82B03600091C4D /* DPL2Decoder.cpp in Sources */,
