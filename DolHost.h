@@ -34,6 +34,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "InputCommon/ControllerInterface/Device.h"
 
+#include "DolphinNoGUI/Platform.h"
+
 #include "DiscIO/Enums.h"
 
 class DolHost {
@@ -70,6 +72,8 @@ public:
 
     bool CoreRunning();
 
+    WindowSystemInfo GetWSI();
+    
     void SetCheat(std::string code, std::string value, bool enabled);
     //Vector of all Codes
     std::vector<Gecko::GeckoCode> gcodes;
@@ -104,4 +108,6 @@ public:
 
     void SetUpPlayerInputs();
     ciface::Core::Device::Input* m_playerInputs[4][OEWiiButtonCount];
+    
+    
 };

@@ -26,6 +26,7 @@
 
 #include "DolHost.h"
 #include "input.h"
+#include "ControllerEmu.h"
 
 #include <OpenGL/gl3.h>
 #include <OpenGL/gl3ext.h>
@@ -65,7 +66,7 @@
 #include "UICommon/UICommon.h"
 
 #include "InputCommon/InputConfig.h"
-#include "InputCommon/ControllerEmu/ControlGroup/Extension.h"
+#include "InputCommon/ControllerEmu/ControlGroup/Attachments.h"
 #include "InputCommon/ControllerEmu/ControlGroup/Cursor.h"
 #include "InputCommon/ControllerEmu/Control/Control.h"
 #include "InputCommon/ControlReference/ControlReference.h"
@@ -82,6 +83,8 @@ static Common::Flag s_running{true};
 
 static Common::Flag s_shutdown_requested{false};
 static Common::Flag s_tried_graceful_shutdown{false};
+
+static std::unique_ptr<Platform> s_platform;
 
 DolHost* DolHost::GetInstance()
 {
@@ -162,8 +165,8 @@ void DolHost::Init(std::string supportDirectoryPath, std::string cpath)
         std::string _memCardA = _memCardPath + "_A." + _gameCountryDir + ".raw";
         std::string _memCardB = _memCardPath +  "_B." + _gameCountryDir + ".raw";
         
-        SConfig::GetInstance().m_strMemoryCardA = _memCardA;
-        SConfig::GetInstance().m_strMemoryCardB = _memCardB;
+        //SConfig::GetInstance().m_strMemoryCardA = _memCardA;
+        //SConfig::GetInstance().m_strMemoryCardB = _memCardB;
         
         
     }
@@ -178,8 +181,8 @@ void DolHost::Init(std::string supportDirectoryPath, std::string cpath)
             _wiiWAD = false;
         
         //clear the GC mem card paths
-        SConfig::GetInstance().m_strMemoryCardA = "";
-        SConfig::GetInstance().m_strMemoryCardB = "";
+        //SConfig::GetInstance().m_strMemoryCardA = "";
+        //SConfig::GetInstance().m_strMemoryCardB = "";
         
         //Disable WiiNAD checks
         SConfig::GetInstance().m_enable_signature_checks = false;
@@ -198,6 +201,7 @@ void DolHost::Init(std::string supportDirectoryPath, std::string cpath)
 # pragma mark - Execution
 bool DolHost::LoadFileAtPath()
 {
+     s_platform = Platform::CreateHeadlessPlatform();
     
     Core::SetOnStateChangedCallback([](Core::State state) {
         if (state == Core::State::Uninitialized)
@@ -211,8 +215,17 @@ bool DolHost::LoadFileAtPath()
     //    //    else
     //    //        WiiUtils::DoDiscUpdate(nil, _gameRegionName);
     
-    if (!BootManager::BootCore(BootParameters::GenerateFromFile(_gamePath)))
+    
+    if (!BootManager::BootCore(BootParameters::GenerateFromFile(_gamePath), s_platform->GetWindowSystemInfo()))
         return false;
+    
+    Openemu_Input_Init();
+    
+    //OPENEMUCORE::Input::ResetControllers();
+    openemu_set_controller_port_device(1, OPENEMU_DEVICE_WIIMOTE_CC);
+    
+    
+    init_Callback();
     
     while (!Core::IsRunningAndStarted() && s_running.IsSet())
     {
@@ -460,11 +473,11 @@ void DolHost::setButtonState(int button, int state, int player)
     player -= 1;
     
     if (_gameType == DiscIO::Platform::GameCubeDisc) {
-        setGameCubeButton(player, button, state);
+       // setGameCubeButton(player, button, state);
     }
     else
     {
-        setWiiButton(player, button, state);
+        //setWiiButton(player, button, state);
     }
     
     if (button == OEWiiChangeExtension)
@@ -475,19 +488,19 @@ void DolHost::setButtonState(int button, int state, int player)
         return;
     }
     
-    if ( _wiiChangeExtension[player] && state == 1)
-    {
-        if ( button <= OEWiiMoteSwingBackward ) {
-            changeWiimoteExtension(WiimoteEmu::EXT_NONE, player);
-            Core::DisplayMessage("Extenstion Removed", 1500);
-        } else if (button <= OEWiiNunchuckButtonZ ) {
-            changeWiimoteExtension(WiimoteEmu::EXT_NUNCHUK, player);
-            Core::DisplayMessage("Nunchuk Connected", 1500);
-        } else if (button <= OEWiiClassicButtonHome ) {
-            changeWiimoteExtension(WiimoteEmu::EXT_CLASSIC, player);
-            Core::DisplayMessage("Classic Controller Connected", 1500);
-        }
-    }
+//    if ( _wiiChangeExtension[player] && state == 1)
+//    {
+//        if ( button <= OEWiiMoteSwingBackward ) {
+//            changeWiimoteExtension(WiimoteEmu::EXT_NONE, player);
+//            Core::DisplayMessage("Extenstion Removed", 1500);
+//        } else if (button <= OEWiiNunchuckButtonZ ) {
+//            changeWiimoteExtension(WiimoteEmu::EXT_NUNCHUK, player);
+//            Core::DisplayMessage("Nunchuk Connected", 1500);
+//        } else if (button <= OEWiiClassicButtonHome ) {
+//            changeWiimoteExtension(WiimoteEmu::EXT_CLASSIC, player);
+//            Core::DisplayMessage("Classic Controller Connected", 1500);
+//        }
+//    }
 }
 
 void DolHost::SetAxis(int button, float value, int player)
@@ -495,21 +508,21 @@ void DolHost::SetAxis(int button, float value, int player)
     player -= 1;
     
     if (_gameType == DiscIO::Platform::GameCubeDisc) {
-        setGameCubeAxis(player, button, value);
+        //setGameCubeAxis(player, button, value);
     }
     else
     {
-        setWiiAxis(player, button, value);
+      //  setWiiAxis(player, button, value);
     }
 }
 
 void DolHost::changeWiimoteExtension(int extension, int player)
 {
     //Player has already been adjusted befor call
-    auto* ce_extension = static_cast<ControllerEmu::Extension*>(Wiimote::GetWiimoteGroup(player, WiimoteEmu::WiimoteGroup::Extension));
-    ce_extension->switch_extension = extension;
-    
-    WiiRemotes[player].extension = extension;
+//    auto* ce_extension = static_cast<ControllerEmu::Extension*>(Wiimote::GetWiimoteGroup(player, WiimoteEmu::WiimoteGroup::Extension));
+//    ce_extension->switch_extension = extension;
+//
+//    WiiRemotes[player].extension = extension;
 }
 
 void DolHost::SetIR(int player, float x, float y)
@@ -524,8 +537,9 @@ void DolHost::GetGameInfo()
     std::unique_ptr<DiscIO::Volume> pVolume = DiscIO::CreateVolumeFromFilename(_gamePath );
     
     _gameID = pVolume->GetGameID();
-    _gameRegion = pVolume->GetRegion() ;
-    _gameCountry =  DiscIO::CountrySwitch(_gameID[3]);
+    _gameRegion = pVolume->GetRegion();
+    _gameType =  pVolume->GetVolumeType();
+    _gameCountry =  DiscIO::CountryCodeToCountry(_gameID[3], _gameType , _gameRegion);
     _gameName = pVolume -> GetInternalName();
     _gameCountryDir = GetDirOfCountry(_gameCountry);
     _gameType = pVolume->GetVolumeType();
@@ -583,6 +597,11 @@ std::string DolHost::GetDirOfCountry(DiscIO::Country country)
     }
 }
 
+WindowSystemInfo DolHost::GetWSI()
+{
+    return s_platform->GetWindowSystemInfo();
+}
+
 # pragma mark - Dolphin Host callbacks
 void Host_NotifyMapLoaded() {}
 void Host_RefreshDSPDebuggerWindow() {}
@@ -625,10 +644,12 @@ void Host_SetStartupDebuggingParameters()
 }
 
 bool Host_UINeedsControllerState(){ return false; }
+bool Host_UIBlocksControllerState() { return false; }
 bool Host_RendererHasFocus() { return true; }
 bool Host_RendererIsFullscreen() { return false; }
 void Host_ShowVideoConfig(void*, const std::string&) {}
 void Host_YieldToUI() {}
+void Host_TitleChanged() {}
 void Host_UpdateProgressDialog(const char* caption, int position, int total) {
     // OSD::AddMessage(StringFromFormat("Processing: %d of %d shaders.", position, total), 5000);
 }

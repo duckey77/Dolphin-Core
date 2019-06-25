@@ -8,7 +8,6 @@
 
 #include "AudioCommon/CubebStream.h"
 #include "AudioCommon/CubebUtils.h"
-#include "AudioCommon/DPL2Decoder.h"
 #include "Common/CommonTypes.h"
 #include "Common/Logging/Log.h"
 #include "Common/Thread.h"
@@ -21,18 +20,14 @@ long CubebStream::DataCallback(cubeb_stream* stream, void* user_data, const void
                                void* output_buffer, long num_frames)
 {
     auto* self = static_cast<CubebStream*>(user_data);
-
-    if (self->m_stereo)
-    {
+    
+    if (self->m_stereo) {
         self->m_mixer->Mix(static_cast<short*>(output_buffer), num_frames);
         [[_current ringBufferAtIndex:0] write:(const uint8_t *)output_buffer maxLength:num_frames * 4]; //FRAME_STEREO_SHORT];
-    }
-    else
-    {
+}else{
         self->m_mixer->MixSurround(static_cast<float*>(output_buffer), num_frames);
         [[_current ringBufferAtIndex:0] write:(const uint8_t *)output_buffer maxLength:num_frames * 2]; //FRAME_MONO_SHORT];
-    }
-    
+}
     return num_frames;
 }
 
@@ -45,9 +40,9 @@ bool CubebStream::Init()
     m_ctx = CubebUtils::GetContext();
     if (!m_ctx)
         return false;
-
+    
     m_stereo = !SConfig::GetInstance().bDPL2Decoder;
-
+    
     cubeb_stream_params params;
     params.rate = m_mixer->GetSampleRate();
     if (m_stereo)
@@ -62,12 +57,12 @@ bool CubebStream::Init()
         params.format = CUBEB_SAMPLE_FLOAT32NE;
         params.layout = CUBEB_LAYOUT_3F2_LFE;
     }
-
+    
     u32 minimum_latency = 0;
     if (cubeb_get_min_latency(m_ctx.get(), &params, &minimum_latency) != CUBEB_OK)
         ERROR_LOG(AUDIO, "Error getting minimum latency");
     INFO_LOG(AUDIO, "Minimum latency: %i frames", minimum_latency);
-
+    
     return cubeb_stream_init(m_ctx.get(), &m_stream, "Dolphin Audio Output", nullptr, nullptr,
                              nullptr, &params, std::max(BUFFER_SAMPLES, minimum_latency),
                              DataCallback, StateCallback, this) == CUBEB_OK;

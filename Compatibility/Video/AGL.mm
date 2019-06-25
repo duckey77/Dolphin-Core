@@ -3,27 +3,10 @@
 // Refer to the license.txt file included.
 #include "DolphinGameCore.h"
 #include "Core/ConfigManager.h"
+#include <OpenGL/gl3.h>
 
 #include "Common/GL/GLInterface/AGL.h"
 #include "Common/Logging/Log.h"
-#include <OpenGL/gl3.h>
-
-void cInterfaceAGL::Swap()
-{
-    [_current.renderDelegate didRenderFrameOnAlternateThread];
-}
-
-bool cInterfaceAGL::MakeCurrent()
-{
-    [_current.renderDelegate willRenderFrameOnAlternateThread];
-
-    // Set the background color of the context to black
-    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT);
-    Swap();
-
-    return true;
-}
 
 static bool UpdateCachedDimensions(NSView* view, u32* width, u32* height)
 {
@@ -35,50 +18,71 @@ static bool AttachContextToView(NSOpenGLContext* context, NSView* view, u32* wid
     return true;
 }
 
+GLContextAGL::~GLContextAGL()
+{
+}
+
+bool GLContextAGL::IsHeadless() const
+{
+    return false;
+}
+
+void GLContextAGL::Swap()
+{
+    [_current.renderDelegate didRenderFrameOnAlternateThread];
+}
 
 // Create rendering window.
 // Call browser: Core.cpp:EmuThread() > main.cpp:Video_Initialize()
-bool cInterfaceAGL::Create(void* window_handle, bool stereo, bool core)
+bool GLContextAGL::Initialize(void* display_handle, void* window_handle, bool stereo, bool core)
 {
     MakeCurrent();
-
-    // Control window size and picture scaling
-    if(SConfig::GetInstance().bWii) {
-        s_backbuffer_width = 854;
-        s_backbuffer_height = 480;
-    } else {
-        s_backbuffer_width = 640;
-        s_backbuffer_height = 480;
-    }
-    return true;
+        // Control window size and picture scaling
+        if(SConfig::GetInstance().bWii) {
+            m_backbuffer_width = 854;
+            m_backbuffer_height = 480;
+        } else {
+            m_backbuffer_width = 640;
+            m_backbuffer_height = 480;
+        }
+        return true;
+   
 }
 
-bool cInterfaceAGL::Create(cInterfaceBase* main_context)
-{
-    return true;
-}
-
-std::unique_ptr<cInterfaceBase> cInterfaceAGL::CreateSharedContext()
+std::unique_ptr<GLContext> GLContextAGL::CreateSharedContext()
 {
     return nullptr;
 }
 
-bool cInterfaceAGL::ClearCurrent()
+bool GLContextAGL::MakeCurrent()
+{
+    [_current.renderDelegate willRenderFrameOnAlternateThread];
+    
+    // Set the background color of the context to black
+    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT);
+    Swap();
+
+    return true;
+}
+
+bool GLContextAGL::ClearCurrent()
 {
     return true;
 }
 
-// Close backend
-void cInterfaceAGL::Shutdown()
+void GLContextAGL::Update()
 {
-}
-
-void cInterfaceAGL::Update()
-{
+    if(SConfig::GetInstance().bWii) {
+        m_backbuffer_width = 854;
+        m_backbuffer_height = 480;
+    } else {
+        m_backbuffer_width = 640;
+        m_backbuffer_height = 480;
+    }
     return;
 }
 
-void cInterfaceAGL::SwapInterval(int interval)
+void GLContextAGL::SwapInterval(int interval)
 {
 }
-

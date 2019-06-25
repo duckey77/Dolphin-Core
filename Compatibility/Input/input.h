@@ -1,149 +1,93 @@
-#pragma once
 
-#include "Core/HW/GCPad.h"
-#include "Core/HW/Wiimote.h"
-#include "Core/HW/WiimoteEmu/Attachment/Classic.h"
-#include "Core/HW/WiimoteEmu/Attachment/Nunchuk.h"
-#include "Core/HW/WiimoteEmu/WiimoteEmu.h"
-#include "Core/ConfigManager.h"
-#include "Common/Common.h"
-#include "Common/CommonTypes.h"
+#define OPENEMU_DEVICE_NONE         0
+#define OPENEMU_DEVICE_JOYPAD       1
+#define OPENEMU_DEVICE_MOUSE        2
+#define OPENEMU_DEVICE_KEYBOARD     3
+#define OPENEMU_DEVICE_LIGHTGUN     4
+#define OPENEMU_DEVICE_ANALOG       5
+#define OPENEMU_DEVICE_POINTER      6
+#define OPENEMU_DEVICE_ID_JOYPAD_B        0
+#define OPENEMU_DEVICE_ID_JOYPAD_Y        1
+#define OPENEMU_DEVICE_ID_JOYPAD_SELECT   2
+#define OPENEMU_DEVICE_ID_JOYPAD_START    3
+#define OPENEMU_DEVICE_ID_JOYPAD_UP       4
+#define OPENEMU_DEVICE_ID_JOYPAD_DOWN     5
+#define OPENEMU_DEVICE_ID_JOYPAD_LEFT     6
+#define OPENEMU_DEVICE_ID_JOYPAD_RIGHT    7
+#define OPENEMU_DEVICE_ID_JOYPAD_A        8
+#define OPENEMU_DEVICE_ID_JOYPAD_X        9
+#define OPENEMU_DEVICE_ID_JOYPAD_L       10
+#define OPENEMU_DEVICE_ID_JOYPAD_R       11
+#define OPENEMU_DEVICE_ID_JOYPAD_L2      12
+#define OPENEMU_DEVICE_ID_JOYPAD_R2      13
+#define OPENEMU_DEVICE_ID_JOYPAD_L3      14
+#define OPENEMU_DEVICE_ID_JOYPAD_R3      15
+#define OPENEMU_DEVICE_INDEX_ANALOG_LEFT       0
+#define OPENEMU_DEVICE_INDEX_ANALOG_RIGHT      1
+#define OPENEMU_DEVICE_INDEX_ANALOG_BUTTON     2
+#define OPENEMU_DEVICE_ID_ANALOG_X             0
+#define OPENEMU_DEVICE_ID_ANALOG_Y             1
+#define OPENEMU_DEVICE_ID_MOUSE_X                0
+#define OPENEMU_DEVICE_ID_MOUSE_Y                1
+#define OPENEMU_DEVICE_ID_MOUSE_LEFT             2
+#define OPENEMU_DEVICE_ID_MOUSE_RIGHT            3
+#define OPENEMU_DEVICE_ID_MOUSE_WHEELUP          4
+#define OPENEMU_DEVICE_ID_MOUSE_WHEELDOWN        5
+#define OPENEMU_DEVICE_ID_MOUSE_MIDDLE           6
+#define OPENEMU_DEVICE_ID_MOUSE_HORIZ_WHEELUP    7
+#define OPENEMU_DEVICE_ID_MOUSE_HORIZ_WHEELDOWN  8
+#define OPENEMU_DEVICE_ID_MOUSE_BUTTON_4         9
+#define OPENEMU_DEVICE_ID_MOUSE_BUTTON_5         10
+#define OPENEMU_DEVICE_ID_LIGHTGUN_SCREEN_X        13 /*Absolute Position*/
+#define OPENEMU_DEVICE_ID_LIGHTGUN_SCREEN_Y        14 /*Absolute*/
+#define OPENEMU_DEVICE_ID_LIGHTGUN_IS_OFFSCREEN    15 /*Status Check*/
+#define OPENEMU_DEVICE_ID_LIGHTGUN_TRIGGER          2
+#define OPENEMU_DEVICE_ID_LIGHTGUN_RELOAD          16 /*Forced off-screen shot*/
+#define OPENEMU_DEVICE_ID_LIGHTGUN_AUX_A            3
+#define OPENEMU_DEVICE_ID_LIGHTGUN_AUX_B            4
+#define OPENEMU_DEVICE_ID_LIGHTGUN_START            6
+#define OPENEMU_DEVICE_ID_LIGHTGUN_SELECT           7
+#define OPENEMU_DEVICE_ID_LIGHTGUN_AUX_C            8
+#define OPENEMU_DEVICE_ID_LIGHTGUN_DPAD_UP          9
+#define OPENEMU_DEVICE_ID_LIGHTGUN_DPAD_DOWN       10
+#define OPENEMU_DEVICE_ID_LIGHTGUN_DPAD_LEFT       11
+#define OPENEMU_DEVICE_ID_LIGHTGUN_DPAD_RIGHT      12
 
-#include "Core/Host.h"
-
-#include "InputCommon/InputConfig.h"
-#include "InputCommon/GCPadStatus.h"
-
-#include "DolphinGameCore.h"
-#include "Wii/OEWiiSystemResponderClient.h"
-
-static unsigned connected_wiimote_type[MAX_BBMOTES];
-static int current_mote_id;
-//static InputConfig s_config(WIIMOTE_INI_NAME, _trans("Wii Remote"), "Wiimote");
+#define OPENEMU_DEVICE_ID_POINTER_X         0
+#define OPENEMU_DEVICE_ID_POINTER_Y         1
+#define OPENEMU_DEVICE_ID_POINTER_PRESSED   2
 
 
-typedef struct
+#define OPENEMU_DEVICE_WIIMOTE ((1 << 8) | OPENEMU_DEVICE_JOYPAD)
+#define OPENEMU_DEVICE_WIIMOTE_SW ((2 << 8) | OPENEMU_DEVICE_JOYPAD)
+#define OPENEMU_DEVICE_WIIMOTE_NC ((3 << 8) | OPENEMU_DEVICE_JOYPAD)
+#define OPENEMU_DEVICE_WIIMOTE_CC ((4 << 8) | OPENEMU_DEVICE_JOYPAD)
+#define OPENEMU_DEVICE_REAL_WIIMOTE ((6 << 8) | OPENEMU_DEVICE_NONE)
+
+struct openemu_controller_description
 {
-    int openemuButton;
-    unsigned dolphinButton;
-    int value;
-} keymap;
+    const char *desc;
+    unsigned id;
+};
 
-typedef struct
+struct openemu_controller_info
 {
-    float Xaxis;
-    float Yaxis;
-} axismap;
+    const struct openemu_controller_description *types;
+    unsigned num_types;
+};
 
-typedef struct
+struct openemu_input_descriptor
 {
-    keymap gc_pad_keymap[12] = {
-        {OEGCButtonLeft, PAD_BUTTON_LEFT, 0},
-        {OEGCButtonRight, PAD_BUTTON_RIGHT, 0},
-        {OEGCButtonDown, PAD_BUTTON_DOWN, 0},
-        {OEGCButtonUp, PAD_BUTTON_UP, 0},
-        {OEGCButtonZ, PAD_TRIGGER_Z, 0},
-        {OEGCButtonR, PAD_TRIGGER_R, 0},
-        {OEGCButtonL, PAD_TRIGGER_L, 0},
-        {OEGCButtonA, PAD_BUTTON_A, 0},
-        {OEGCButtonB, PAD_BUTTON_B, 0},
-        {OEGCButtonX, PAD_BUTTON_X, 0},
-        {OEGCButtonY, PAD_BUTTON_Y, 0},
-        {OEGCButtonStart, PAD_BUTTON_START, 0},
-    };
+    unsigned port;
+    unsigned device;
+    unsigned index;
+    unsigned id;
+    const char *description;
+};
 
-    axismap gc_pad_Analog;
-    axismap gc_pad_AnalogC;
-} gc_pad;
+typedef int16_t (*openemu_input_state_t)(unsigned port, unsigned device, unsigned index, unsigned id);
 
-typedef struct
-{
-    keymap wiimote_keymap[11] = {
-        {OEWiiMoteButtonLeft, WiimoteEmu::Wiimote::PAD_LEFT, 0},
-        {OEWiiMoteButtonRight, WiimoteEmu::Wiimote::PAD_RIGHT, 0},
-        {OEWiiMoteButtonDown, WiimoteEmu::Wiimote::PAD_DOWN, 0},
-        {OEWiiMoteButtonUp, WiimoteEmu::Wiimote::PAD_UP, 0},
-        {OEWiiMoteButtonPlus, WiimoteEmu::Wiimote::BUTTON_PLUS, 0},
-        {OEWiiMoteButton2, WiimoteEmu::Wiimote::BUTTON_TWO, 0},
-        {OEWiiMoteButton1, WiimoteEmu::Wiimote::BUTTON_ONE, 0},
-        {OEWiiMoteButtonB, WiimoteEmu::Wiimote::BUTTON_B, 0},
-        {OEWiiMoteButtonA, WiimoteEmu::Wiimote::BUTTON_A, 0},
-        {OEWiiMoteButtonMinus, WiimoteEmu::Wiimote::BUTTON_MINUS, 0},
-        {OEWiiMoteButtonHome, WiimoteEmu::Wiimote::BUTTON_HOME, 0},
-    };
+void openemu_set_controller_port_device(unsigned port, unsigned device);
+void openemu_set_input_state(openemu_input_state_t);
 
-    keymap sideways_keymap[11] = {
-        {OEWiiMoteButtonLeft, WiimoteEmu::Wiimote::PAD_UP, 0},
-        {OEWiiMoteButtonRight, WiimoteEmu::Wiimote::PAD_DOWN, 0},
-        {OEWiiMoteButtonDown, WiimoteEmu::Wiimote::PAD_LEFT, 0},
-        {OEWiiMoteButtonUp, WiimoteEmu::Wiimote::PAD_RIGHT, 0},
-        {OEWiiMoteButtonPlus, WiimoteEmu::Wiimote::BUTTON_PLUS, 0},
-        {OEWiiMoteButton2, WiimoteEmu::Wiimote::BUTTON_TWO, 0},
-        {OEWiiMoteButton1, WiimoteEmu::Wiimote::BUTTON_ONE, 0},
-        {OEWiiMoteButtonB, WiimoteEmu::Wiimote::BUTTON_B, 0},
-        {OEWiiMoteButtonA, WiimoteEmu::Wiimote::BUTTON_A, 0},
-        {OEWiiMoteButtonMinus, WiimoteEmu::Wiimote::BUTTON_MINUS, 0},
-        {OEWiiMoteButtonHome, WiimoteEmu::Wiimote::BUTTON_HOME, 0},
-    };
-
-    axismap wiimote_tilt;
-    axismap wiimote_swing;
-    bool emuShake;
-    bool Sideways;
-    
-    keymap nunchuk_keymap[2] = {
-        {OEWiiNunchukButtonC, WiimoteEmu::Nunchuk::BUTTON_C, 0},
-        {OEWiiNunchuckButtonZ, WiimoteEmu::Nunchuk::BUTTON_Z, 0},
-    };
-
-    axismap nunchuck_Analog;
-
-    keymap classic_keymap[15] = {
-        {OEWiiClassicButtonRight, WiimoteEmu::Classic::PAD_RIGHT, 0},
-        {OEWiiClassicButtonDown, WiimoteEmu::Classic::PAD_DOWN, 0},
-        {OEWiiClassicButtonL, WiimoteEmu::Classic::TRIGGER_L, 0},
-        {OEWiiClassicButtonSelect, WiimoteEmu::Classic::BUTTON_MINUS, 0},
-        {OEWiiClassicButtonHome, WiimoteEmu::Classic::BUTTON_HOME, 0},
-        {OEWiiClassicButtonStart, WiimoteEmu::Classic::BUTTON_PLUS, 0},
-        {OEWiiClassicButtonR, WiimoteEmu::Classic::TRIGGER_R, 0},
-        {OEWiiClassicButtonZl, WiimoteEmu::Classic::BUTTON_ZL, 0},
-        {OEWiiClassicButtonB, WiimoteEmu::Classic::BUTTON_B, 0},
-        {OEWiiClassicButtonY, WiimoteEmu::Classic::BUTTON_Y, 0},
-        {OEWiiClassicButtonX, WiimoteEmu::Classic::BUTTON_X, 0},
-        {OEWiiClassicButtonA, WiimoteEmu::Classic::BUTTON_A, 0},
-        {OEWiiClassicButtonZr, WiimoteEmu::Classic::BUTTON_ZR, 0},
-        {OEWiiClassicButtonLeft, WiimoteEmu::Classic::PAD_LEFT, 0},
-        {OEWiiClassicButtonUp, WiimoteEmu::Classic::PAD_UP, 0},
-    };
-
-    axismap classic_AnalogLeft;
-    axismap classic_AnalogRight;
-    axismap classic_TriggerLeft;
-    axismap classic_TriggerRight;
-    
-    int extension;
-    ControlState dx, dy;
-    
-} wii_remote;
-
-
- static gc_pad GameCubePads[4];
- static wii_remote WiiRemotes[4];
- static int want_extension[4];
-
-
-void setGameCubeButton(int pad_num, int button , int value);
-void setGameCubeAxis(int pad_num, int button , float value);
-
-void setWiiButton(int pad_num, int button , int value);
-void setWiimoteButton(int pad_num, int button , int value);
-void setWiiClassicButton(int pad_num, int button , int value);
-void setWiiNunchukButton(int pad_num, int button , int value);
-
-void setWiiAxis(int pad_num, int button , float value);
-void setWiimoteAxis(int pad_num, int button , float value);
-void setWiiClassicAxis(int pad_num, int button , float value);
-void setWiiNunchukAxis(int pad_num, int button , float value);
-void setWiiIR(int pad_num, float x , float y);
-
-int getWiiExtension (int pad_num);
+void Openemu_Input_Init();

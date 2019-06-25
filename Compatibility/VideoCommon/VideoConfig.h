@@ -39,7 +39,8 @@ enum class StereoMode : int
     TAB,
     Anaglyph,
     QuadBuffer,
-    Nvidia3DVision
+    Passive,
+    Nvidia3DVision,
 };
 
 enum class ShaderCompilationMode : int
@@ -56,12 +57,13 @@ struct VideoConfig final
     VideoConfig();
     void Refresh();
     void VerifyValidity();
-    bool IsVSync() const;
     
     // General
     bool bVSync;
+    bool bVSyncActive;
     bool bWidescreenHack;
     AspectMode aspect_mode;
+    AspectMode suggested_aspect_mode;
     bool bCrop;  // Aspect ratio controls.
     bool bShaderCache;
     
@@ -74,6 +76,8 @@ struct VideoConfig final
     std::string sPostProcessingShader;
     bool bForceTrueColor;
     bool bDisableCopyFilter;
+    bool bArbitraryMipmapDetection;
+    float fArbitraryMipmapDetectionThreshold;
     
     // Information
     bool bShowFPS;
@@ -90,7 +94,7 @@ struct VideoConfig final
     bool bDisableFog;
     
     //  OE render buffer
-    int iRenderFBO = 0;
+        int iRenderFBO = 0;
     
     // Utility
     bool bDumpTextures;
@@ -112,15 +116,16 @@ struct VideoConfig final
     
     // Hacks
     bool bEFBAccessEnable;
+    bool bEFBAccessDeferInvalidation;
     bool bPerfQueriesEnable;
     bool bBBoxEnable;
-    bool bBBoxPreferStencilImplementation;  // OpenGL-only, to see how slow it is compared to SSBOs
     bool bForceProgressive;
     
     bool bEFBEmulateFormatChanges;
     bool bSkipEFBCopyToRam;
     bool bSkipXFBCopyToRam;
     bool bDisableCopyToVRAM;
+    bool bDeferEFBCopies;
     bool bImmediateXFB;
     bool bCopyEFBScaled;
     int iSafeTextureCache_ColorSamples;
@@ -128,6 +133,7 @@ struct VideoConfig final
     bool bEnablePixelLighting;
     bool bFastDepthCalc;
     bool bVertexRounding;
+    int iEFBAccessTileSize;
     int iLog;           // CONF_ bits
     int iSaveTargetId;  // TODO: Should be dropped
     
@@ -185,6 +191,7 @@ struct VideoConfig final
         std::string AdapterName;  // for OpenGL
         
         u32 MaxTextureSize;
+        bool bUsesLowerLeftOrigin;
         
         bool bSupportsExclusiveFullscreen;
         bool bSupportsDualSourceBlend;
@@ -214,6 +221,10 @@ struct VideoConfig final
         bool bSupportsBPTCTextures;
         bool bSupportsFramebufferFetch;  // Used as an alternative to dual-source blend on GLES
         bool bSupportsBackgroundCompiling;
+        bool bSupportsLargePoints;
+        bool bSupportsPartialDepthCopies;
+        bool bSupportsShaderBinaries;
+        bool bSupportsPipelineCacheData;
     } backend_info;
     
     // Utility
@@ -221,12 +232,6 @@ struct VideoConfig final
     bool ExclusiveFullscreenEnabled() const
     {
         return backend_info.bSupportsExclusiveFullscreen && !bBorderlessFullscreen;
-    }
-    bool BBoxUseFragmentShaderImplementation() const
-    {
-        if (backend_info.api_type == APIType::OpenGL && bBBoxPreferStencilImplementation)
-            return false;
-        return backend_info.bSupportsBBox && backend_info.bSupportsFragmentStoresAndAtomics;
     }
     bool UseGPUTextureDecoding() const
     {
