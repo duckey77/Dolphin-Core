@@ -870,7 +870,6 @@
 		3EFF294D1F8581B000B4FD11 /* AGL.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3E3D70261C82AF2A00091C4D /* AGL.mm */; };
 		3EFF294F1F85830500B4FD11 /* Render.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3EFF28DD1F85604F00B4FD11 /* Render.cpp */; };
 		3EFF29571F85A24400B4FD11 /* Render.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3E89F4831CCE8AC600EAE7AC /* Render.cpp */; };
-		3EFF295A1F85B93600B4FD11 /* CubebStream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3EFF29581F85B92E00B4FD11 /* CubebStream.cpp */; };
 		3EFF295F1F85D08700B4FD11 /* libpugixml-dol.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3EFF277D1F8461BC00B4FD11 /* libpugixml-dol.a */; };
 		8355D4C71A65393600E73302 /* libcore-dol.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C0C8A955FC946C29B9EDABF /* libcore-dol.a */; };
 		8355D4E41A653B6600E73302 /* DolphinGameCore.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8355D4E31A653B6600E73302 /* DolphinGameCore.mm */; };
@@ -1019,6 +1018,9 @@
 		EEC94A68224AC13A00F85ABA /* libOGLCompilersDLL-dol.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EEC94A62224ABFDC00F85ABA /* libOGLCompilersDLL-dol.a */; };
 		EECD3721224AAADE000AE115 /* libuicommon-dol.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 125948FD17D5434DA13C8293 /* libuicommon-dol.a */; };
 		EECD3722224AAB5C000AE115 /* libvideovulkan-dol.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EE3EC435224AA01500BA7436 /* libvideovulkan-dol.a */; };
+		EEE07D3822C271D1006D46FD /* OpenEmuAudioStream.mm in Sources */ = {isa = PBXBuildFile; fileRef = EEE07D3422C26D0A006D46FD /* OpenEmuAudioStream.mm */; };
+		EEE07D3922C271D1006D46FD /* AudioCommon.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EEE07D3622C26DA7006D46FD /* AudioCommon.cpp */; };
+		EEE07D3C22C272D5006D46FD /* libaudiocommon-dol.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F4EAB8D2A0AA45A183467CCD /* libaudiocommon-dol.a */; };
 		EEF4EEE6224AAF5D0077748D /* OpenEmuBase.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E3D774A1C83DC9000091C4D /* OpenEmuBase.framework */; };
 		EEF4EEED224AAF980077748D /* ossource.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EEF4EE81224AAE650077748D /* ossource.cpp */; };
 		EEF4EEEE224AAFB50077748D /* ParseHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EEF4EE98224AAE650077748D /* ParseHelper.cpp */; };
@@ -1570,6 +1572,13 @@
 			proxyType = 1;
 			remoteGlobalIDString = A33327301E8D455CABCEF3CE;
 			remoteInfo = uicommon;
+		};
+		EEE07D3A22C272CE006D46FD /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8AE37EB7920C4C86939DE6E9 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = FFA5E2D5A7C543E9AEF69BE8;
+			remoteInfo = audiocommon;
 		};
 		EEF4EF0B224AAFFE0077748D /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -3158,7 +3167,6 @@
 		3EFF29301F85626600B4FD11 /* net_sockets.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = net_sockets.c; path = dolphin/Externals/mbedtls/library/net_sockets.c; sourceTree = "<group>"; };
 		3EFF29311F85626700B4FD11 /* cmac.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = cmac.c; path = dolphin/Externals/mbedtls/library/cmac.c; sourceTree = "<group>"; };
 		3EFF29511F858A2000B4FD11 /* VideoConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = VideoConfig.h; path = VideoCommon/VideoConfig.h; sourceTree = "<group>"; };
-		3EFF29581F85B92E00B4FD11 /* CubebStream.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CubebStream.cpp; path = Audio/CubebStream.cpp; sourceTree = "<group>"; };
 		4B3F200BFA3B4AA9B8072A6A /* libsfml-network-dol.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = "libsfml-network-dol.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		57799651D35F4D0F946361A2 /* libpng-dol.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = "libpng-dol.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5AE2ADF9B49F4F4EB95615D5 /* libcommon-dol.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = "libcommon-dol.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -3479,6 +3487,9 @@
 		EEC94A50224ABFD200F85ABA /* InitializeDll.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = InitializeDll.h; sourceTree = "<group>"; };
 		EEC94A51224ABFD200F85ABA /* InitializeDll.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = InitializeDll.cpp; sourceTree = "<group>"; };
 		EEC94A62224ABFDC00F85ABA /* libOGLCompilersDLL-dol.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libOGLCompilersDLL-dol.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		EEE07D3322C26CD7006D46FD /* OpenEmuAudioStream.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = OpenEmuAudioStream.h; path = Audio/OpenEmuAudioStream.h; sourceTree = "<group>"; };
+		EEE07D3422C26D0A006D46FD /* OpenEmuAudioStream.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = OpenEmuAudioStream.mm; path = Audio/OpenEmuAudioStream.mm; sourceTree = "<group>"; };
+		EEE07D3622C26DA7006D46FD /* AudioCommon.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = AudioCommon.cpp; path = Audio/AudioCommon.cpp; sourceTree = "<group>"; };
 		EEF4EE7E224AAE650077748D /* CMakeLists.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
 		EEF4EE81224AAE650077748D /* ossource.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ossource.cpp; sourceTree = "<group>"; };
 		EEF4EE82224AAE650077748D /* CMakeLists.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
@@ -3638,6 +3649,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EEE07D3C22C272D5006D46FD /* libaudiocommon-dol.a in Frameworks */,
 				EE3A465F22B6880800031B56 /* libfmt-dol.a in Frameworks */,
 				EE475779224AB4C50027BA05 /* libvideovulkan-dol.a in Frameworks */,
 				EE475778224AB4BF0027BA05 /* libglslang-dol.a in Frameworks */,
@@ -4401,7 +4413,9 @@
 		3E89F4751CCA7A0500EAE7AC /* Audio */ = {
 			isa = PBXGroup;
 			children = (
-				3EFF29581F85B92E00B4FD11 /* CubebStream.cpp */,
+				EEE07D3322C26CD7006D46FD /* OpenEmuAudioStream.h */,
+				EEE07D3422C26D0A006D46FD /* OpenEmuAudioStream.mm */,
+				EEE07D3622C26DA7006D46FD /* AudioCommon.cpp */,
 			);
 			name = Audio;
 			sourceTree = "<group>";
@@ -7316,6 +7330,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				EEE07D3B22C272CE006D46FD /* PBXTargetDependency */,
 				EE3A465E22B687FA00031B56 /* PBXTargetDependency */,
 				EE47577B224AB4D20027BA05 /* PBXTargetDependency */,
 				3EFF295E1F85D07E00B4FD11 /* PBXTargetDependency */,
@@ -8936,12 +8951,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				3E3D70A01C82B03600091C4D /* WaveFile.cpp in Sources */,
-				3EFF295A1F85B93600B4FD11 /* CubebStream.cpp in Sources */,
 				3E8EC58E1F8428F100D79F27 /* CubebUtils.cpp in Sources */,
 				3E3D709C1C82B03600091C4D /* NullSoundStream.cpp in Sources */,
+				EEE07D3922C271D1006D46FD /* AudioCommon.cpp in Sources */,
 				3E3D709E1C82B03600091C4D /* OpenSLESStream.cpp in Sources */,
 				3E8EC58B1F8428DF00D79F27 /* OpenALStream.cpp in Sources */,
 				EE8DD2C6224A7E1A005E1AF5 /* SurroundDecoder.cpp in Sources */,
+				EEE07D3822C271D1006D46FD /* OpenEmuAudioStream.mm in Sources */,
 				3E3D70981C82B03600091C4D /* AudioCommon.cpp in Sources */,
 				3E3D709B1C82B03600091C4D /* Mixer.cpp in Sources */,
 				3E8EC58C1F8428E500D79F27 /* AudioStretcher.cpp in Sources */,
@@ -9449,6 +9465,11 @@
 			isa = PBXTargetDependency;
 			target = A33327301E8D455CABCEF3CE /* uicommon */;
 			targetProxy = EECD371F224AAAD5000AE115 /* PBXContainerItemProxy */;
+		};
+		EEE07D3B22C272CE006D46FD /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = FFA5E2D5A7C543E9AEF69BE8 /* audiocommon */;
+			targetProxy = EEE07D3A22C272CE006D46FD /* PBXContainerItemProxy */;
 		};
 		EEF4EF0C224AAFFE0077748D /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -10114,6 +10135,8 @@
 					$SRCROOT/dolphin/Externals/cubeb/msvc,
 					$SRCROOT/dolphin/Externals,
 					$SRCROOT/dolphin/Externals/FreeSurround/include,
+					"$(SRCROOT)/../OpenEmu/GameCube",
+					"$(SRCROOT)/../OpenEmu/Wii",
 				);
 				INSTALL_PATH = "";
 				LIBRARY_STYLE = STATIC;
@@ -10154,7 +10177,7 @@
 				OTHER_REZFLAGS = "";
 				PRODUCT_NAME = "$(TARGET_NAME)-dol";
 				SECTORDER_FLAGS = "";
-				USE_HEADERMAP = NO;
+				USE_HEADERMAP = YES;
 				WARNING_CFLAGS = (
 					"-Wmost",
 					"-Wno-four-char-constants",
@@ -10229,6 +10252,8 @@
 					$SRCROOT/dolphin/Externals/cubeb/msvc,
 					$SRCROOT/dolphin/Externals,
 					$SRCROOT/dolphin/Externals/FreeSurround/include,
+					"$(SRCROOT)/../OpenEmu/GameCube",
+					"$(SRCROOT)/../OpenEmu/Wii",
 				);
 				INSTALL_PATH = "";
 				LIBRARY_STYLE = STATIC;
@@ -10271,7 +10296,7 @@
 				OTHER_REZFLAGS = "";
 				PRODUCT_NAME = "$(TARGET_NAME)-dol";
 				SECTORDER_FLAGS = "";
-				USE_HEADERMAP = NO;
+				USE_HEADERMAP = YES;
 				WARNING_CFLAGS = (
 					"-Wmost",
 					"-Wno-four-char-constants",
@@ -10652,6 +10677,8 @@
 					$SRCROOT/dolphin/Externals/cubeb/msvc,
 					$SRCROOT/dolphin/Externals,
 					$SRCROOT/dolphin/Externals/FreeSurround/include,
+					"$(SRCROOT)/../OpenEmu/GameCube",
+					"$(SRCROOT)/../OpenEmu/Wii",
 				);
 				INSTALL_PATH = "";
 				LIBRARY_STYLE = STATIC;
@@ -10694,7 +10721,7 @@
 				OTHER_REZFLAGS = "";
 				PRODUCT_NAME = "$(TARGET_NAME)-dol";
 				SECTORDER_FLAGS = "";
-				USE_HEADERMAP = NO;
+				USE_HEADERMAP = YES;
 				WARNING_CFLAGS = (
 					"-Wmost",
 					"-Wno-four-char-constants",
@@ -16633,6 +16660,8 @@
 					$SRCROOT/dolphin/Externals/cubeb/msvc,
 					$SRCROOT/dolphin/Externals,
 					$SRCROOT/dolphin/Externals/FreeSurround/include,
+					"$(SRCROOT)/../OpenEmu/GameCube",
+					"$(SRCROOT)/../OpenEmu/Wii",
 				);
 				INSTALL_PATH = "";
 				LIBRARY_STYLE = STATIC;
@@ -16675,7 +16704,7 @@
 				OTHER_REZFLAGS = "";
 				PRODUCT_NAME = "$(TARGET_NAME)-dol";
 				SECTORDER_FLAGS = "";
-				USE_HEADERMAP = NO;
+				USE_HEADERMAP = YES;
 				WARNING_CFLAGS = (
 					"-Wmost",
 					"-Wno-four-char-constants",
